@@ -25,9 +25,41 @@ class ImuClient:
         return acc, omega
 
 
+# if __name__ == '__main__':
+#     imu_client = ImuClient()
+
+#     while True:
+#         time.sleep(0.1)
+#         print(imu_client.data)
+
+
 if __name__ == '__main__':
+    import math
+    def hypot3(x, y, z):
+        return math.sqrt(x**2 + y**2 + z**2)
+
     imu_client = ImuClient()
 
+    ax0, ay0, az0 = 0, 0, 0
+    max_a_norm = 0
+    THROW_THRES = 1
+    STOP_THRES = 0.5
+
     while True:
-        time.sleep(0.1)
-        print(imu_client.data)
+        time.sleep(0.01)
+        (ax, ay, az), _ = imu_client.data
+        az -= 1
+
+        a_norm = hypot3(ax, ay, az)
+        if a_norm > THROW_THRES and ay*az > 0:
+            max_a_norm = max(max_a_norm, a_norm)
+            if ay < 0 or az < 0:
+                ax *= -1
+                ay *= -1
+                az *= -1
+            ax0, ay0, az0 = ax, ay, az
+            print(ax0, ay0, az0)
+        elif a_norm < STOP_THRES:
+            max_a_norm = 0
+
+        # print(round(ax, 2), round(ay, 2), round(az, 2))

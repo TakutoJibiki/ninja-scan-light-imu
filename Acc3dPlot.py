@@ -26,7 +26,7 @@ if __name__ == '__main__':
         w -= 1
 
         a_norm = hypot3(u, v, w)
-        if hypot3(u, v, w) > THROW_THRES and v > 0 and w > 0:
+        if a_norm > THROW_THRES and v > 0 and w > 0:
             max_a_norm = max(max_a_norm, a_norm)
             u0, v0, w0 = u, v, w
             print(u0, v0, w0)
