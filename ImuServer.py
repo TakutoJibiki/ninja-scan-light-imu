@@ -2,11 +2,7 @@ import subprocess
 import time
 import socket
 import threading
-
-IP_ADDRESS = '127.0.0.1'
-PORT_CLIENT = 7010
-PORT_SERVER = 7011
-BUFFER_SIZE = 2048
+import Config
 
 imu_data = ''
 
@@ -46,14 +42,14 @@ if __name__ == '__main__':
     # 入力データを通信で受け取る
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
         # IP Adress とPortの指定と割り当て
-        s.bind((IP_ADDRESS, PORT_SERVER))
+        s.bind((Config.IP_ADDRESS, Config.PORT_SERVER))
 
         while True:
             # クライアントから何かしら送られてくるまで待機
-            s.recvfrom(BUFFER_SIZE)
+            s.recvfrom(Config.BUFFER_SIZE)
 
             # IMUのデータを送る
             s.sendto(
                 imu_data.encode(),
-                (IP_ADDRESS, PORT_CLIENT)
+                (Config.IP_ADDRESS, Config.PORT_CLIENT)
             )
