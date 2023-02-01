@@ -1,5 +1,6 @@
 import socket
 import time
+import Config
 
 IP_ADDRESS = '127.0.0.1'
 PORT_CLIENT = 7010
@@ -20,6 +21,11 @@ class ImuClient:
         d = [float(i) for i in rcv_data.decode().split(', ')]
         acc = [i/4096.0 for i in d[:3]]
         omega = [i/16.4 for i in d[3:]]
+
+        for i in range(3):
+            acc[i] -= Config.STOP_ACC[i]
+            omega[i] -= Config.STOP_OMEGA[i]
+            
         return acc, omega
 
 
